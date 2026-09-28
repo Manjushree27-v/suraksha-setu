@@ -1,4 +1,4 @@
-# Mine Subsidence Monitoring Dashboard
+# Suraksha Setu
 
 AI-enabled real-time mine subsidence monitoring and early warning dashboard for underground coal mines.
 

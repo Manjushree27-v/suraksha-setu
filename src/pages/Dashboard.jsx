@@ -3,6 +3,7 @@ import {
   Bell,
   Siren,
   Radio,
+  Volume2,
   VolumeX,
   Gauge,
   MapPin,
@@ -26,6 +27,12 @@ function Dashboard() {
 
   const [alarmEnabled, setAlarmEnabled] = useState(true);
   const [isAcknowledged, setIsAcknowledged] = useState(false);
+
+  // Controls the dashboard's live activity.
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Shown only when live activity is paused.
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   const audioContextRef = useRef(null);
   const alarmIntervalRef = useRef(null);
@@ -102,7 +109,8 @@ useEffect(() => {
   if (
     simulationStatus === "CRITICAL" &&
     alarmEnabled &&
-    !isAcknowledged
+    !isAcknowledged &&
+    !isPaused
   ) {
 
     playAlarmBeep();
@@ -126,7 +134,8 @@ useEffect(() => {
 }, [
   simulationStatus,
   alarmEnabled,
-  isAcknowledged
+  isAcknowledged,
+  isPaused
 ]);
 
   /*
@@ -263,6 +272,8 @@ useEffect(() => {
    */
 
   useEffect(() => {
+    if (isPaused) return;
+
     const interval = setInterval(() => {
       setTelemetryMode((current) =>
         current === "AVERAGE"
@@ -272,7 +283,25 @@ useEffect(() => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
+
+  /*
+   * ---------------------------------------------------------
+   * LIVE ACTIVITY / PAUSE
+   * ---------------------------------------------------------
+   */
+
+  const formatTime = (date) =>
+    date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+
+  const togglePause = () => {
+    setLastUpdated(new Date());
+    setIsPaused((current) => !current);
+  };
 
   /*
    * ---------------------------------------------------------
@@ -382,7 +411,7 @@ useEffect(() => {
   }
 >
   {alarmEnabled ? (
-    <Bell size={15} strokeWidth={2} />
+    <Volume2 size={15} strokeWidth={2} />
   ) : (
     <VolumeX size={15} strokeWidth={2} />
   )}
@@ -501,15 +530,17 @@ useEffect(() => {
 
       <section className="control-row">
 
-        <div className="live-feed">
+        <div className={`live-feed ${isPaused ? "feed-paused" : "feed-live"}`}>
 
-          <span className="live-dot"></span>
+          <span className={`live-dot ${isPaused ? "dot-paused" : "dot-live"}`}></span>
 
-          LIVE MESH FEED
+          {isPaused ? "MESH FEED PAUSED" : "LIVE MESH FEED"}
 
-          <span className="last-update">
-            Last update 01:04:22 PM
-          </span>
+          {isPaused && (
+            <span className="last-update">
+              Last updated {formatTime(lastUpdated)}
+            </span>
+          )}
 
         </div>
 
@@ -551,8 +582,16 @@ useEffect(() => {
             CRITICAL
           </button>
 
-          <button className="pause-button">
-            Ⅱ PAUSE
+          <button
+            className={`pause-button ${isPaused ? "resume-button" : ""}`}
+            onClick={togglePause}
+            aria-label={
+              isPaused
+                ? "Resume live dashboard activity"
+                : "Pause live dashboard activity"
+            }
+          >
+            {isPaused ? "▶ RESUME" : "Ⅱ PAUSE"}
           </button>
 
         </div>
@@ -635,8 +674,8 @@ useEffect(() => {
 
             </div>
 
-            <span className="live-badge">
-              • LIVE
+            <span className={`live-badge ${isPaused ? "live-badge-paused" : ""}`}>
+              • {isPaused ? "PAUSED" : "LIVE"}
             </span>
 
           </div>

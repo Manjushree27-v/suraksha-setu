@@ -343,7 +343,7 @@ useEffect(() => {
   </div>
 
   <div>
-    <div className="eyebrow">Mine Safety Intelligence · SS-01</div>
+    <div className="eyebrow">MINE SAFETY INTELLIGENCE · SS-01</div>
     <h1>SURAKSHA SETU</h1>
   </div>
 </div>

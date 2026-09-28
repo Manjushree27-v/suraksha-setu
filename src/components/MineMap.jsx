@@ -15,18 +15,18 @@ function MineMap({
 
   const center = [23.7624, 86.4068];
 
-  const getColor = (risk) => {
+  const getColor = (displacement) => {
 
-    if (risk >= 75) {
-      return "#ef4444";
-    }
+  if (displacement >= 15) {
+    return "#ef4444"; // CRITICAL
+  }
 
-    if (risk >= 50) {
-      return "#f59e0b";
-    }
+  if (displacement >= 10) {
+    return "#f59e0b"; // WARNING
+  }
 
-    return "#16a34a";
-  };
+  return "#16a34a"; // SAFE
+};
 
 
   return (
@@ -37,11 +37,12 @@ function MineMap({
         center={center}
         zoom={13}
         scrollWheelZoom={true}
+        attributionControl={false}
         style={{
-          height: "100%",
-          width: "100%"
-        }}
-      >
+        height: "100%",
+        width: "100%"
+      }}
+    >
 
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
@@ -52,7 +53,7 @@ function MineMap({
         {nodes.map((node) => {
 
           const color = getColor(
-            node.riskScore
+            node.displacement
           );
 
           const isSelected =

@@ -15,15 +15,18 @@ import {
   ShieldCheck
 } from "lucide-react";
 
+import surakshaLogo from "../assets/ss.png";
 import historicalData from "../data/historicalData";
 import SensorChart from "../components/SensorChart";
 import mockNodes from "../data/mockNodes";
 import MineMap from "../components/MineMap";
 
 function Dashboard() {
+  const [operatorAcknowledged, setOperatorAcknowledged] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
   const [simulationStatus, setSimulationStatus] = useState("WARNING");
   const [telemetryMode, setTelemetryMode] = useState("AVERAGE");
+  const [incident2408Acknowledged, setIncident2408Acknowledged] = useState(false);
 
   const [alarmEnabled, setAlarmEnabled] = useState(true);
   const [isAcknowledged, setIsAcknowledged] = useState(false);
@@ -368,8 +371,8 @@ useEffect(() => {
 
         <div className="brand-block">
   <div className="brand-icon">
-    <Radio size={19} strokeWidth={2.2} />
-  </div>
+  <img src={surakshaLogo} alt="Suraksha Setu logo" />
+</div>
 
   <div>
     <div className="eyebrow">MINE SAFETY INTELLIGENCE · SS-01</div>
@@ -1240,105 +1243,115 @@ useEffect(() => {
       </section>
 
 
-      {/* =====================================================
-          OPERATOR LOG
-      ===================================================== */}
+     {/* =====================================================
+    OPERATOR LOG
+===================================================== */}
 
-      <section className="operator-log">
+<section className="operator-log">
 
-        <div className="lower-panel-heading">
+  <div className="lower-panel-heading">
 
-          <div>
+    <div>
 
-            <span className="eyebrow">
-              INCIDENT HISTORY / घटना इतिहास
-            </span>
+      <span className="eyebrow">
+        INCIDENT HISTORY / घटना इतिहास
+      </span>
 
-            <h2>Operator log</h2>
+      <h2>Operator log</h2>
 
-          </div>
+    </div>
 
-          <span className="event-count">
-            2 events
-          </span>
+    <span className="event-count">
+      2 events
+    </span>
 
-        </div>
-
-
-        <div className="incident">
-
-          <div className="incident-icon">
-            <Bell size={16} />
-          </div>
-
-          <div className="incident-content">
-
-            <div className="incident-title">
-
-              <strong>INC-2408</strong>
-
-              <span>Panel 4B / East</span>
-
-              <small className="incident-warning">
-                WARNING · चेतावनी
-              </small>
-
-            </div>
-
-            <strong>
-              Tilt rising above safe limit
-            </strong>
-
-            <p>
-              12:36 PM · Check affected nodes and restrict heavy vehicle movement.
-            </p>
-
-          </div>
-
-          <button className="incident-button">
-            Acknowledge
-          </button>
-
-        </div>
+  </div>
 
 
-        <div className="incident muted-incident">
+  {/* ================= INC-2408 ================= */}
 
-          <div className="incident-icon">
-            <Bell size={16} />
-          </div>
+  <div className="incident">
 
-          <div className="incident-content">
+    <div className="incident-icon">
+      <Bell size={16} />
+    </div>
 
-            <div className="incident-title">
+    <div className="incident-content">
 
-              <strong>INC-2407</strong>
+      <div className="incident-title">
 
-              <span>Panel 4A / North</span>
+        <strong>INC-2408</strong>
 
-              <small className="incident-critical">
-                DANGER · CRITICAL
-              </small>
+        <span>Panel 4B / East</span>
 
-            </div>
+        <small className="incident-warning">
+          WARNING · चेतावनी
+        </small>
 
-            <strong>
-              Micro vibration spike
-            </strong>
+      </div>
 
-            <p>
-              11:30 AM · Evacuation drill completed. Ground team notified.
-            </p>
+      <strong>
+        Tilt rising above safe limit
+      </strong>
 
-          </div>
+      <p>
+        12:36 PM · Check affected nodes and restrict heavy vehicle movement.
+      </p>
 
-          <span className="acknowledged">
-            ✓ ACK
-          </span>
+    </div>
 
-        </div>
+    {operatorAcknowledged ? (
+  <span className="acknowledged">✓ ACK</span>
+) : (
+  <button
+    className="incident-ack-button"
+    onClick={() => setOperatorAcknowledged(true)}
+  >
+    Acknowledge
+  </button>
+)}
+  </div>
 
-      </section>
+
+  {/* ================= INC-2407 ================= */}
+
+  <div className="incident muted-incident">
+
+    <div className="incident-icon">
+      <Bell size={16} />
+    </div>
+
+    <div className="incident-content">
+
+      <div className="incident-title">
+
+        <strong>INC-2407</strong>
+
+        <span>Panel 4A / North</span>
+
+        <small className="incident-critical">
+          DANGER · CRITICAL
+        </small>
+
+      </div>
+
+      <strong>
+        Micro vibration spike
+      </strong>
+
+      <p>
+        11:30 AM · Evacuation drill completed. Ground team notified.
+      </p>
+
+    </div>
+
+    <span className="acknowledged">
+      ✓ ACK
+    </span>
+
+  </div>
+
+</section>
 
 
       {/* =====================================================

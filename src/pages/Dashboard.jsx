@@ -338,20 +338,15 @@ useEffect(() => {
       <header className="dashboard-header">
 
         <div className="brand-block">
+  <div className="brand-icon">
+    <Radio size={19} strokeWidth={2.2} />
+  </div>
 
-          <div className="brand-icon">
-            <Radio size={18} strokeWidth={2.2} />
-          </div>
-
-          <div>
-            <div className="eyebrow">
-              MINE WATCH · MW-04
-            </div>
-
-            <h1>Subsidence Command</h1>
-          </div>
-
-        </div>
+  <div>
+    <div className="eyebrow">Mine Safety Intelligence · SS-01</div>
+    <h1>SURAKSHA SETU</h1>
+  </div>
+</div>
 
         <div className="mine-info">
 
